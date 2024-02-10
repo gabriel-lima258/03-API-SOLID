@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// definindo quais os tipos de cargos
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+// model é um nome dado para criar uma table
+model User {
+  id            String   @id @default(uuid()) // um @ especifíca uma campo daquela tabela
+  name          String
+  email         String   @unique
+  password_hash String
+  role          Role     @default(MEMBER)// cargos
+  created_at    DateTime @default(now())
+
+  checkIns CheckIn[]
+
+  @@map("users") // dois @ especifíca a tabela como todo, no caso o nome alterado
+}
+
+model CheckIn {
+  id           String    @id @default(uuid())
+  created_at   DateTime  @default(now())
+  validated_at DateTime? // validação, caso informe será adicionado 
+
+  // relacionamento de tabelas
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  gym   Gym    @relation(fields: [gym_id], references: [id])
+  gym_id String
+
+  @@map("check_ins")
+}
+
+model Gym {
+  id          String    @id @default(uuid())
+  title       String
+  description String? // ? serve como preenchimento opcional
+  phone       String?
+  latitude    Decimal // latitude e longitude será usado para localização
+  longitude   Decimal
+
+  checkIns     CheckIn[]
+
+  @@map("gyms")
+}
