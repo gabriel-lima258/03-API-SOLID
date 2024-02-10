@@ -34,7 +34,7 @@ describe('Search Gyms Use Case', () => {
 
     // buscando uma academia pelo nome iron berg
     const { gyms } = await searchGymsUseCase.execute({
-      querry: 'iron berg',
+      query: 'iron berg',
       page: 1,
     })
 
@@ -55,7 +55,7 @@ describe('Search Gyms Use Case', () => {
     }
 
     const { gyms } = await searchGymsUseCase.execute({
-      querry: 'iron berg',
+      query: 'iron berg',
       page: 2,
     })
 
